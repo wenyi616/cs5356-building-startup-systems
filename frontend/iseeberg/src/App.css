@@ -50,7 +50,7 @@
   margin-top: -200px;
 }
 
-
+/* 
 .popup-box {
   position: fixed;
   background: #00000050;
@@ -61,7 +61,6 @@
 }
  
 .box {
-  /* position: relative; */
   width: 20%;
   margin: 0 auto;
   height: auto;
@@ -70,8 +69,6 @@
   background: #fff;
   border-radius: 4px;
   padding: 0px;
-  /* border: 1px solid #999; */
-  /* overflow: auto; */
 }
  
 .close-icon {
@@ -88,4 +85,15 @@
   text-align: center;
   border: 1px solid #999;
   font-size: 20px;
+} */
+
+.auth-box {
+  visibility: visible;
+}
+
+.hello-user {
+  color:  #E4EEF0;
+  font-size: 36px;
+  padding-bottom: 20px;
+  font-weight: bold;
 }

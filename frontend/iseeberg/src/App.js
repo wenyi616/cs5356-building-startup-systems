@@ -8,7 +8,6 @@ import Icon from '@mdi/react'
 import { mdiMagnify } from '@mdi/js';
 
 import { useState, Component } from 'react';
-import Popup from './Popup';
 
 // Import FirebaseAuth and firebase.
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
@@ -36,6 +35,7 @@ const uiConfig = {
     firebase.auth.EmailAuthProvider.PROVIDER_ID
   ]
 };
+
 
 
 class SignedIn extends React.Component {
@@ -67,7 +67,7 @@ class SignedIn extends React.Component {
             <a class="navbar-item">Home</a>
             <a class="navbar-item">Stamps</a>            
             <a class="navbar-item">My trips</a>
-            <a class="navbar-item" onClick={() => this.signOut()}>Sign Out</a>
+            <a class="navbar-item sign-out" onClick={() => this.signOut()}>Sign Out</a>
           </div>
         </div>
       </nav>
@@ -79,7 +79,9 @@ class SignedIn extends React.Component {
               <div class="column is-5-fullhd is-offset-1-fullhd
               is-10-mobile is-offset-1-mobile is-10-tablet is-offset-1-tablet
               is-5-desktop is-offset-1-desktop is-5-widescreen is-offset-1-widescreen" data-aos="fade-down">
-                <h2> Hello {this.props.user.displayName}</h2>
+                <div class="content hello-user">
+                  <p> Hello, {this.props.user.displayName} 🐻</p>
+                </div>
               </div>
             
             </div>
@@ -114,6 +116,7 @@ class App extends React.Component {
     this.state = {
       user: null
     }
+    
   }
 
   componentDidMount() {
@@ -126,11 +129,8 @@ class App extends React.Component {
     });
   }
   
-  signOut() {
-    firebase.auth().signOut()
-  }
-
   render() {
+
     if (this.state.user) {
       return (
         <SignedIn user={this.state.user}/>
@@ -157,7 +157,7 @@ class App extends React.Component {
         </div>
       </nav>
       
-      <div>
+      <div class="auth-box">
         <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
       </div>
 
