@@ -1,38 +1,44 @@
-.App {
-  text-align: center;
+@import "https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css";
+
+.hero-bg { 
+  background-image: url(./images/background.jpg) ;
+  background-position: center center;
+  background-repeat:  no-repeat;
+  background-attachment: fixed;
+  background-size:  cover;
+  background-color: #94B1DD;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.navbar-item img {
+  max-height: 3rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.navbar-item {
+  margin: 30px 0;
+  padding: 0 28px;
+  border-radius: 20px;
+  
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.navbar {
+  background-color: aquamarine;
+  margin: 20px 50px;
+  height: 100px;
 }
 
-.App-link {
-  color: #61dafb;
+.logo-nav {
+  height: 50px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.search-input {
+  /* width: 30%; */
+  height: 3.2em;
+  background: #E4EEF0;
+  border: 2.8px solid #E4EEF0;
+  margin-left: -20px;
+}
+
+
+.search {
+  margin-top: -200px;
 }
