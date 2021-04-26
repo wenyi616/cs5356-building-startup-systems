@@ -1,16 +1,18 @@
+import React from 'react'
+
 import logo from './images/logo.png'; 
 import './App.css';
 
-import React, { Component } from 'react'
+// Using icon library
 import Icon from '@mdi/react'
 import { mdiMagnify } from '@mdi/js';
+
+import { useState, Component } from 'react';
+import Popup from './Popup';
 
 // Import FirebaseAuth and firebase.
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import firebase from 'firebase';
-
-import { useState } from 'react';
-import Popup from './Popup';
 
 
 var firebaseConfig = {
@@ -36,102 +38,151 @@ const uiConfig = {
 };
 
 
-function signedInComponent() {
-  return (
-      <section class="hero is-white is-fullheight">
-        <div class="hero-body">
-          <div class="container">
-            <div class="columns  is-vcentered reverse-columns">
-              <div class="column is-5-fullhd is-offset-1-fullhd
-              is-10-mobile is-offset-1-mobile is-10-tablet is-offset-1-tablet
-              is-5-desktop is-offset-1-desktop is-5-widescreen is-offset-1-widescreen" data-aos="fade-down">     
-                <h1 class="title titled is-1 mb-6">
-                  Hello User
-                </h1>
-                <h2 class="subtitle subtitled">
-                  You are now signed in. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laborum cupiditate dolorum vitae dolores
-                  nesciunt totam magni quas.
-                </h2>
-              </div>
-              <div class="column is-5-fullhd is-offset-1-fullhd
-              is-10-mobile is-offset-1-mobile is-10-tablet is-offset-1-tablet
-              is-5-desktop is-offset-1-desktop is-5-widescreen is-offset-1-widescreen" data-aos="fade-down"> 
-                <figure class="image is-square">
-                  <img src={logo}></img>
-                </figure>
-              </div>
-            </div>
+class SignedIn extends React.Component {
+  
+  constructor(props) {
+    super(props)
+    
+    this.state = {
+      user: null
+    }
+  }
+
+  signOut() {
+    firebase.auth().signOut()
+  }
+  
+  render() {
+    return (  
+    <section class="hero is-fullheight hero-bg">
+      <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+          <a class="navbar-item" href="">
+            <img class="logo-nav" src={logo}></img>
+          </a>
+        </div>
+  
+        <div class="navbar-menu">
+          <div class="navbar-end">
+            <a class="navbar-item">Home</a>
+            <a class="navbar-item">Stamps</a>            
+            <a class="navbar-item">My trips</a>
+            <a class="navbar-item" onClick={() => this.signOut()}>Sign Out</a>
           </div>
         </div>
+      </nav>
+
+      <div class="hero-body">
+        <div class="container">
+        <div class="search">
+            <div class="columns is-vcentered reverse-columns">
+              <div class="column is-5-fullhd is-offset-1-fullhd
+              is-10-mobile is-offset-1-mobile is-10-tablet is-offset-1-tablet
+              is-5-desktop is-offset-1-desktop is-5-widescreen is-offset-1-widescreen" data-aos="fade-down">
+                <h2> Hello {this.props.user.displayName}</h2>
+              </div>
+            
+            </div>
+                <div class="columns is-vcentered reverse-columns">
+                  <div class="column is-5-fullhd is-offset-1-fullhd
+                  is-10-mobile is-offset-1-mobile is-10-tablet is-offset-1-tablet
+                  is-5-desktop is-offset-1-desktop is-5-widescreen is-offset-1-widescreen" data-aos="fade-down">
+                    <input class="input is-rounded search-input" type="text" placeholder="WHERE ARE WE GOING NEXT?"></input>
+                  </div>
+                
+                  <button class="button search-button">
+                    <span class="icon">
+                    <Icon path={mdiMagnify} title="" color="#94B1DD" size="2em"/>
+                    </span>
+                  </button>
+                </div>
+                </div>
+          
+        </div>
+      </div>
     </section>
-  )
+    );
+  }
 }
 
 
-function App() {
-
-  const [isOpen, setIsOpen] = useState(false);
- 
-  const togglePopup = () => {
-    setIsOpen(!isOpen);
+class App extends React.Component {
+  
+  constructor(props) {
+    super(props)
+    
+    this.state = {
+      user: null
+    }
   }
 
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.setState({user});
+      } else {
+        this.setState({user:null});
+      }
+    });
+  }
+  
+  signOut() {
+    firebase.auth().signOut()
+  }
 
-  return (
-    <div className="App">
-      <header className="App-header">
-      </header>
+  render() {
+    if (this.state.user) {
+      return (
+        <SignedIn user={this.state.user}/>
+      )
+    }
 
-  <section class="hero is-fullheight hero-bg">
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-      <div class="navbar-brand">
-        <a class="navbar-item" href="">
-          <img class="logo-nav" src={logo}></img>
-        </a>
-      </div>
-
-      <div class="navbar-menu">
-        <div class="navbar-end">
-          <a class="navbar-item">Home</a>
-          <a class="navbar-item">Stamps</a>            
-          <a class="navbar-item">My trips</a>
-          <a class="navbar-item" onClick={togglePopup}>Sign in</a>
-          {isOpen && <Popup
-              content={<>
-                {/* Content in the popup */}
-                <div>
-                  <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
-                </div>
-              </>}
-              handleClose={togglePopup}
-            />}
+    // when user is not signed in
+    return (  
+    <section class="hero is-fullheight hero-bg">
+      <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+          <a class="navbar-item" href="">
+            <img class="logo-nav" src={logo}></img>
+          </a>
         </div>
+  
+        <div class="navbar-menu">
+          <div class="navbar-end">
+            <a class="navbar-item">Home</a>
+            <a class="navbar-item">Stamps</a>            
+            <a class="navbar-item">My trips</a>
+            <a class="navbar-item">Sign in</a>
+          </div>
+        </div>
+      </nav>
+      
+      <div>
+        <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
       </div>
-    </nav>
 
-    <div class="hero-body">
-      <div class="container">
-        <div class="search">
-          <div class="columns is-vcentered reverse-columns">
-            <div class="column is-5-fullhd is-offset-1-fullhd
-            is-10-mobile is-offset-1-mobile is-10-tablet is-offset-1-tablet
-            is-5-desktop is-offset-1-desktop is-5-widescreen is-offset-1-widescreen" data-aos="fade-down">
-              <input class="input is-rounded search-input" type="text" placeholder="WHERE ARE WE GOING NEXT?"></input>
+      <div class="hero-body">
+        <div class="container">
+          <div class="search">
+            <div class="columns is-vcentered reverse-columns">
+              <div class="column is-5-fullhd is-offset-1-fullhd
+              is-10-mobile is-offset-1-mobile is-10-tablet is-offset-1-tablet
+              is-5-desktop is-offset-1-desktop is-5-widescreen is-offset-1-widescreen" data-aos="fade-down">
+                <input class="input is-rounded search-input" type="text" placeholder="WHERE ARE WE GOING NEXT?"></input>
+              </div>
+            
+              <button class="button search-button">
+                <span class="icon">
+                <Icon path={mdiMagnify} title="" color="#94B1DD" size="2em"/>
+                </span>
+              </button>
             </div>
-          
-            <button class="button search-button">
-              <span class="icon">
-              <Icon path={mdiMagnify} title="" color="#94B1DD" size="2em"/>
-              </span>
-            </button>
+            </div>
           </div>
-          </div>
-        </div>
-    </div>
-  </section>
-
-    </div>
-  );
+      </div>
+    </section>
+    );
+  }
 }
 
 export default App;
