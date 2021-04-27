@@ -3,6 +3,7 @@
 var config = require('./test.json');
 // console.log('Welcome! ' + config.id + ' ' + config.name);
 
+
 module.exports.hello = async (event) =>{
   if (event.path === '/whoami' && event.httpMethod === 'GET') {
     return {
@@ -13,12 +14,41 @@ module.exports.hello = async (event) =>{
     };
   }
 
-  if (event.httpMethod === 'GET' && event.path === '/spots') {
-    return {
-      statusCode: 200,
-      body: JSON.stringify(config)
+  const projectId = 'iseeberg-cs5356'
+  const firebaseTokenVerifier = require('firebase-token-verifier');
+
+  if (event.path === '/spots' && event.httpMethod === 'GET') {
+      // check the header named Authorization
+      const token = event.headers['Authorization']
+      
+      // If no token is provided, or it is "", return a 401
+      if (!token) {
+        return {
+          statusCode: 401
+        }
+      }
+  
+      try {
+        
+        // validate the token from the request
+        const decoded = await firebaseTokenVerifier.validate(token, projectId)
+      
+      } catch (err) {
+        // the token was invalid,
+        console.error(err)
+        
+        return {
+          statusCode: 401
+        }
+        
+      }
+  
+      // user is now confirmed to be authorized, return the data
+      return {
+        statusCode: 200,
+        body: JSON.stringify(config)
+      }
     }
-  }
 
   return {
     statusCode: 200,

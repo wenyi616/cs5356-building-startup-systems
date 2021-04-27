@@ -7,7 +7,7 @@ import './App.css';
 import Icon from '@mdi/react'
 import { mdiMagnify, mdiMapMarkerOutline } from '@mdi/js';
 
-import { useState, Component } from 'react';
+// import { useState, Component } from 'react';
 
 // Import FirebaseAuth and firebase.
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
@@ -53,13 +53,28 @@ class SignedIn extends React.Component {
     firebase.auth().signOut()
   }
 
-
   async componentDidMount() {
-    const response = await fetch('http://localhost:3000/dev/spots')
-    const spots = await response.json()
-    // save it to your components state so you can use it during render
-    this.setState({spots: spots})
-    console.log(spots)
+
+    const token = await firebase.auth().currentUser?.getIdToken();
+    console.log(token);
+
+    try {
+      const response = await fetch("http://localhost:3000/dev/spots", {
+        headers: {
+          "Authorization": token,
+        },
+      });
+      
+      if (response.status === 401) {
+        console.log("Unauthorized");
+      } else {
+        console.log("Authorized! 🍻");
+        const data = await response.json();
+        this.setState({ spots: data });
+      }
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   
