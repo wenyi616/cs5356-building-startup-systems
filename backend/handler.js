@@ -1,10 +1,57 @@
 'use strict';
 
 var config = require('./test.json');
-// console.log('Welcome! ' + config.id + ' ' + config.name);
 
+const headers = {
+  'Access-Control-Allow-Origin': '*'
+}
 
 module.exports.hello = async (event) =>{
+
+  const projectId = 'iseeberg-cs5356'
+  const firebaseTokenVerifier = require('firebase-token-verifier');
+
+  // check first if its an OPTIONS request
+  if (event.httpMethod === 'OPTIONS') {
+    // return the expected status and CORS headers
+    return {
+        statusCode: 200,
+        headers
+    }
+  }
+
+  if (event.path === '/spots' && event.httpMethod === 'GET') {
+    // check the header named Authorization
+    const token = event.headers['Authorization']
+    
+    // If no token is provided, or it is "", return a 401
+    if (!token) {
+      return {
+        statusCode: 401
+      }
+    }
+
+    try {
+      // validate the token from the request
+      const decoded = await firebaseTokenVerifier.validate(token, projectId)
+    
+    } catch (err) {
+      // the token was invalid,
+      console.error(err)
+      
+      return {
+        statusCode: 401
+      }
+    }
+
+    // ✨ user is now confirmed to be authorized, return the data ✨
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify(config)
+    }
+  }
+
   if (event.path === '/whoami' && event.httpMethod === 'GET') {
     return {
       statusCode: 200,
@@ -13,42 +60,6 @@ module.exports.hello = async (event) =>{
       ),
     };
   }
-
-  const projectId = 'iseeberg-cs5356'
-  const firebaseTokenVerifier = require('firebase-token-verifier');
-
-  if (event.path === '/spots' && event.httpMethod === 'GET') {
-      // check the header named Authorization
-      const token = event.headers['Authorization']
-      
-      // If no token is provided, or it is "", return a 401
-      if (!token) {
-        return {
-          statusCode: 401
-        }
-      }
-  
-      try {
-        
-        // validate the token from the request
-        const decoded = await firebaseTokenVerifier.validate(token, projectId)
-      
-      } catch (err) {
-        // the token was invalid,
-        console.error(err)
-        
-        return {
-          statusCode: 401
-        }
-        
-      }
-  
-      // user is now confirmed to be authorized, return the data
-      return {
-        statusCode: 200,
-        body: JSON.stringify(config)
-      }
-    }
 
   return {
     statusCode: 200,

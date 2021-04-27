@@ -58,8 +58,15 @@ class SignedIn extends React.Component {
     const token = await firebase.auth().currentUser?.getIdToken();
     console.log(token);
 
+    let backendUrl = 'https://ijtzuxbwni.execute-api.us-east-1.amazonaws.com/dev'
+
     try {
-      const response = await fetch("http://localhost:3000/dev/spots", {
+      if (window.location.href.includes('localhost')) {
+        // if we are on a local environment, use the localhost URL
+        backendUrl = 'http://localhost:3000/dev'
+      }
+
+      const response = await fetch(backendUrl + '/spots', {
         headers: {
           "Authorization": token,
         },
@@ -72,6 +79,7 @@ class SignedIn extends React.Component {
         const data = await response.json();
         this.setState({ spots: data });
       }
+
     } catch (err) {
       console.error(err);
     }
