@@ -5,7 +5,7 @@ import './App.css';
 
 // Using icon library
 import Icon from '@mdi/react'
-import { mdiMagnify } from '@mdi/js';
+import { mdiMagnify, mdiMapMarkerOutline } from '@mdi/js';
 
 import { useState, Component } from 'react';
 
@@ -44,13 +44,24 @@ class SignedIn extends React.Component {
     super(props)
     
     this.state = {
-      user: null
+      user: null,
+      spots: null
     }
   }
 
   signOut() {
     firebase.auth().signOut()
   }
+
+
+  async componentDidMount() {
+    const response = await fetch('http://localhost:3000/dev/spots')
+    const spots = await response.json()
+    // save it to your components state so you can use it during render
+    this.setState({spots: spots})
+    console.log(spots)
+  }
+
   
   render() {
     return (  
@@ -74,32 +85,76 @@ class SignedIn extends React.Component {
 
       <div class="hero-body">
         <div class="container">
-        <div class="search">
+        <div class="hello-plus-card">
             <div class="columns is-vcentered reverse-columns">
               <div class="column is-5-fullhd is-offset-1-fullhd
-              is-10-mobile is-offset-1-mobile is-10-tablet is-offset-1-tablet
-              is-5-desktop is-offset-1-desktop is-5-widescreen is-offset-1-widescreen" data-aos="fade-down">
+                  is-10-mobile is-offset-1-mobile is-10-tablet is-offset-1-tablet
+                  is-5-desktop is-offset-1-desktop is-5-widescreen is-offset-1-widescreen" data-aos="fade-down">
                 <div class="content hello-user">
                   <p> Hello, {this.props.user.displayName} 🐻</p>
                 </div>
               </div>
-            
             </div>
-                <div class="columns is-vcentered reverse-columns">
-                  <div class="column is-5-fullhd is-offset-1-fullhd
+            
+            {/* <div class="columns is-vcentered reverse-columns">
+              <div class="column is-5-fullhd is-offset-1-fullhd
                   is-10-mobile is-offset-1-mobile is-10-tablet is-offset-1-tablet
                   is-5-desktop is-offset-1-desktop is-5-widescreen is-offset-1-widescreen" data-aos="fade-down">
                     <input class="input is-rounded search-input" type="text" placeholder="WHERE ARE WE GOING NEXT?"></input>
-                  </div>
+              </div>
                 
-                  <button class="button search-button">
-                    <span class="icon">
-                    <Icon path={mdiMagnify} title="" color="#94B1DD" size="2em"/>
-                    </span>
-                  </button>
-                </div>
-                </div>
-          
+              <button class="button search-button">
+                <span class="icon">
+                <Icon path={mdiMagnify} title="" color="#94B1DD" size="2em"/>
+                </span>
+              </button>
+            </div> */}
+
+            <div class="columns is-vcentered reverse-columns">
+              <div class="column is-4-fullhd is-offset-1-fullhd
+                  is-10-mobile is-offset-1-mobile is-10-tablet is-offset-1-tablet
+                  is-5-desktop is-offset-1-desktop is-5-widescreen is-offset-1-widescreen" data-aos="fade-down">
+                    {
+                      this.state.spots && this.state.spots.map(spot => {
+                        return (
+                            <div class="card">
+                              <div class="card-image">
+                                <figure class="image is-4by3">
+                                  <img src={spot.photourl} alt="Placeholder image"></img>
+                                </figure>
+                              </div>
+                              <div class="card-content">
+                                <div class="media">
+                                  <div class="media-left">
+                                    <figure class="image is-48x48">
+                                      <img src={spot.contributor.avatar} alt="Placeholder image"></img>
+                                    </figure>
+                                  </div>
+                                  <div class="media-content">
+                                    <p class="title is-5 username">{spot.contributor.username}</p>
+                                    
+                                    <p class="subtitle is-7"><Icon class="subtitle is-7" path={mdiMapMarkerOutline} title="" color="#94B1DD" size="2em"/>{spot.address}</p>
+                                  </div>
+                                </div>
+
+                                <div class="content">
+                                  {spot.description}
+                                  {/* <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time> */}
+                                </div>
+                              </div>
+                            </div>
+                        )
+                      })
+                    }
+              </div>
+                
+              <div class="column is-5-fullhd is-offset-1-fullhd
+                  is-10-mobile is-offset-1-mobile is-10-tablet is-offset-1-tablet
+                  is-5-desktop is-offset-1-desktop is-5-widescreen is-offset-1-widescreen" data-aos="fade-down">
+              </div>
+            </div>
+
+        </div>  
         </div>
       </div>
     </section>

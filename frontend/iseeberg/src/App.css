@@ -91,9 +91,17 @@
   visibility: visible;
 }
 
+.hello-plus-card{
+  padding-top: 20px;
+}
+
 .hello-user {
   color:  #E4EEF0;
-  font-size: 36px;
-  padding-bottom: 20px;
+  font-size: 28px;
+  padding-bottom: 10px;
   font-weight: bold;
+}
+
+.subtitle {
+  vertical-align: middle;
 }

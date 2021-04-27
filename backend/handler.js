@@ -1,5 +1,8 @@
 'use strict';
 
+var config = require('./test.json');
+// console.log('Welcome! ' + config.id + ' ' + config.name);
+
 module.exports.hello = async (event) =>{
   if (event.path === '/whoami' && event.httpMethod === 'GET') {
     return {
@@ -9,6 +12,14 @@ module.exports.hello = async (event) =>{
       ),
     };
   }
+
+  if (event.httpMethod === 'GET' && event.path === '/spots') {
+    return {
+      statusCode: 200,
+      body: JSON.stringify(config)
+    }
+  }
+
   return {
     statusCode: 200,
     body: JSON.stringify(
