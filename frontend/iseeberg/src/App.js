@@ -55,25 +55,11 @@ class SignedIn extends React.Component {
 
   async componentDidMount() {
 
-    // Use the production backend URL by default
-    // let backendUrl = 'https://ws00a11wig.execute-api.us-east-1.amazonaws.com/dev'
-    let backendUrl = 'https://ijtzuxbwni.execute-api.us-east-1.amazonaws.com/dev'
-
-    
-    if (window.location.href.includes('localhost')) {
-      // if we are on a local environment, use the localhost URL
-      // (note that my react app is running on localhost port 4000 so no conflict)
-      backendUrl = 'http://localhost:3000/dev'
-    }
-
     const token = await firebase.auth().currentUser?.getIdToken();
     console.log(token);
-    
 
     try {
-
-      // make the request to your backend
-      const response = await fetch(backendUrl + '/spots', {
+      const response = await fetch("http://localhost:3000/dev/spots", {
         headers: {
           "Authorization": token,
         },
