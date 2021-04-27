@@ -11,7 +11,6 @@ module.exports.hello = async (event) =>{
   const projectId = 'iseeberg-cs5356'
   const firebaseTokenVerifier = require('firebase-token-verifier');
 
-  // check first if its an OPTIONS request
   if (event.httpMethod === 'OPTIONS') {
     // return the expected status and CORS headers
     return {

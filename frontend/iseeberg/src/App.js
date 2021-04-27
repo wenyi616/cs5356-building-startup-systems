@@ -62,7 +62,9 @@ class SignedIn extends React.Component {
 
     try {
       if (window.location.href.includes('localhost')) {
-        // if we are on a local environment, use the localhost URL
+        console.log("local env");
+        
+        // if we are on a local environment, use the localhost URL (my react app is running on 4000 instead)
         backendUrl = 'http://localhost:3000/dev'
       }
 
