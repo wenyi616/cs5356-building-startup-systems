@@ -2,15 +2,16 @@
 
 var config = require('./test.json');
 
-const headers = {
-  'Access-Control-Allow-Origin': '*'
-}
-
 module.exports.hello = async (event) =>{
 
   const projectId = 'iseeberg-cs5356'
   const firebaseTokenVerifier = require('firebase-token-verifier');
 
+  const headers = {
+    'Access-Control-Allow-Origin': '*'
+  }
+
+  
   if (event.httpMethod === 'OPTIONS') {
     // return the expected status and CORS headers
     return {
@@ -23,10 +24,16 @@ module.exports.hello = async (event) =>{
     // check the header named Authorization
     const token = event.headers['Authorization']
     
-    // If no token is provided, or it is "", return a 401
     if (!token) {
       return {
-        statusCode: 401
+        headers,
+        statusCode: 401,
+        body: JSON.stringify(
+          {
+            message: 'no token is provided',
+            input: event
+          }
+        )
       }
     }
 
@@ -35,12 +42,17 @@ module.exports.hello = async (event) =>{
       const decoded = await firebaseTokenVerifier.validate(token, projectId)
     
     } catch (err) {
-      // the token was invalid,
       console.error(err)
       
       return {
+        headers,
         statusCode: 401,
-        headers
+        body: JSON.stringify(
+          {
+            message: 'invalid token',
+            input: event
+          }
+        )
       }
     }
 
@@ -58,7 +70,7 @@ module.exports.hello = async (event) =>{
       headers,
       body: JSON.stringify(
         { "username": "da335"}
-      ),
+      )
     };
   }
 
@@ -69,7 +81,7 @@ module.exports.hello = async (event) =>{
         message: 'Go severless v1.0!',
         input: event,
       }, null, 2
-    ),
+    )
   };
 };
 
