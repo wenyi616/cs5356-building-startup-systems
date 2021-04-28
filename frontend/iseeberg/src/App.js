@@ -190,11 +190,13 @@ class SignedIn extends React.Component {
 
 class App extends React.Component {
   
+
   constructor(props) {
     super(props)
     
     this.state = {
-      user: null
+      user: null,
+      isSigninClicked: false
     }
     
   }
@@ -208,12 +210,26 @@ class App extends React.Component {
       }
     });
   }
+
+  signIn() {
+    this.setState({
+      isSigninClicked: true
+    });
+  }
   
   render() {
 
     if (this.state.user) {
       return (
         <SignedIn user={this.state.user}/>
+      )
+    }
+
+    if (this.state.isSigninClicked) {
+      return (
+        <div class="auth-box">
+        <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
+      </div>
       )
     }
 
@@ -232,14 +248,14 @@ class App extends React.Component {
             <a class="navbar-item">Home</a>
             <a class="navbar-item">Stamps</a>            
             <a class="navbar-item">My trips</a>
-            <a class="navbar-item">Sign in</a>
+            <a class="navbar-item" onClick={() => this.signIn()}>Sign in</a>
           </div>
         </div>
       </nav>
-      
+{/*       
       <div class="auth-box">
         <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
-      </div>
+      </div> */}
 
       <div class="hero-body">
         <div class="container">
