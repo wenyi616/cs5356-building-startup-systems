@@ -59,7 +59,7 @@ class SignedIn extends React.Component {
     console.log(token);
 
     let backendUrl = 'https://ijtzuxbwni.execute-api.us-east-1.amazonaws.com/dev'
-
+    
     try {
       if (window.location.href.includes('localhost')) {
         console.log("local env");

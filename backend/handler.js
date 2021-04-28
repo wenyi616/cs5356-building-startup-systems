@@ -26,7 +26,8 @@ module.exports.hello = async (event) =>{
     // If no token is provided, or it is "", return a 401
     if (!token) {
       return {
-        statusCode: 401
+        statusCode: 401,
+        headers
       }
     }
 
@@ -39,7 +40,8 @@ module.exports.hello = async (event) =>{
       console.error(err)
       
       return {
-        statusCode: 401
+        statusCode: 401,
+        headers
       }
     }
 
