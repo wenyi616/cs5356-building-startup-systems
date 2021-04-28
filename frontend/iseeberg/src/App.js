@@ -75,9 +75,9 @@ class SignedIn extends React.Component {
       });
       
       if (response.status === 401) {
-        console.log("Unauthorized");
+        console.log( "Unauthorized" );
       } else {
-        console.log("Authorized! 🍻");
+        console.log( "Authorized! 🍻" );
         const data = await response.json();
         this.setState({ spots: data });
       }

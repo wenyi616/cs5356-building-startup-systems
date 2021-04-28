@@ -40,16 +40,7 @@ functions:
         # without defining each individually
           path: /{proxy+}
           method: ANY
-
-  # api:
-  #   handler: handler.handler
-  #   events:
-  #     - http:
-  #         path: /
-  #         method: ANY
-  #     - http:
-  #         path: /{proxy+}
-  #         method: ANY
+          
 
 resources:
   Resources:

@@ -26,8 +26,7 @@ module.exports.hello = async (event) =>{
     // If no token is provided, or it is "", return a 401
     if (!token) {
       return {
-        statusCode: 401,
-        headers
+        statusCode: 401
       }
     }
 
@@ -56,6 +55,7 @@ module.exports.hello = async (event) =>{
   if (event.path === '/whoami' && event.httpMethod === 'GET') {
     return {
       statusCode: 200,
+      headers,
       body: JSON.stringify(
         { "username": "da335"}
       ),
