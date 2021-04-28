@@ -8,7 +8,8 @@ module.exports.hello = async (event) =>{
   const firebaseTokenVerifier = require('firebase-token-verifier');
 
   const headers = {
-    'Access-Control-Allow-Origin': '*'
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Credentials': true
   }
 
   
@@ -26,8 +27,8 @@ module.exports.hello = async (event) =>{
     
     if (!token) {
       return {
-        headers,
         statusCode: 401,
+        headers,
         body: JSON.stringify(
           {
             message: 'no token is provided',
@@ -45,8 +46,8 @@ module.exports.hello = async (event) =>{
       console.error(err)
       
       return {
-        headers,
         statusCode: 401,
+        headers,
         body: JSON.stringify(
           {
             message: 'invalid token',
